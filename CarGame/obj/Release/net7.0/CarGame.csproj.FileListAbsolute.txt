@@ -1,0 +1,14 @@
+C:\cygwin64\home\jmc\CarGame\CarGame\bin\Release\net7.0\CarGame.exe
+C:\cygwin64\home\jmc\CarGame\CarGame\bin\Release\net7.0\CarGame.deps.json
+C:\cygwin64\home\jmc\CarGame\CarGame\bin\Release\net7.0\CarGame.runtimeconfig.json
+C:\cygwin64\home\jmc\CarGame\CarGame\bin\Release\net7.0\CarGame.dll
+C:\cygwin64\home\jmc\CarGame\CarGame\bin\Release\net7.0\CarGame.pdb
+C:\cygwin64\home\jmc\CarGame\CarGame\obj\Release\net7.0\CarGame.GeneratedMSBuildEditorConfig.editorconfig
+C:\cygwin64\home\jmc\CarGame\CarGame\obj\Release\net7.0\CarGame.AssemblyInfoInputs.cache
+C:\cygwin64\home\jmc\CarGame\CarGame\obj\Release\net7.0\CarGame.AssemblyInfo.cs
+C:\cygwin64\home\jmc\CarGame\CarGame\obj\Release\net7.0\CarGame.csproj.CoreCompileInputs.cache
+C:\cygwin64\home\jmc\CarGame\CarGame\obj\Release\net7.0\CarGame.dll
+C:\cygwin64\home\jmc\CarGame\CarGame\obj\Release\net7.0\refint\CarGame.dll
+C:\cygwin64\home\jmc\CarGame\CarGame\obj\Release\net7.0\CarGame.pdb
+C:\cygwin64\home\jmc\CarGame\CarGame\obj\Release\net7.0\CarGame.genruntimeconfig.cache
+C:\cygwin64\home\jmc\CarGame\CarGame\obj\Release\net7.0\ref\CarGame.dll
