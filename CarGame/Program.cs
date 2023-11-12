@@ -27,6 +27,7 @@ namespace CarGame
             public double Capacity { get; set; }
             public double FuelAmaount { get; set; }
             public int FuelTankCapacity { get; set; }
+            public double CarScore {  get; set; }
             public Car(string Brand, string Model, double capacity, double FuelAmaount, int FuelTankCapacity)
             {
                 this.Brand = Brand;
@@ -34,16 +35,17 @@ namespace CarGame
                 this.Capacity = capacity;
                 this.FuelAmaount = FuelAmaount;
                 this.FuelTankCapacity = FuelTankCapacity;
+                this.CarScore = 0;
             }
             public void Drive(int driveDistance)
             {
                 int driveTime;
                 double fuelLeft = Math.Round(FuelAmaount - (4 * Capacity / 100) * driveDistance, 2);
-                double how_far_can_you_go = Math.Round(FuelAmaount / (4 * Capacity / 100), 0);
                 if (fuelLeft < 0)
                 {
-                    driveTime = Convert.ToInt32(how_far_can_you_go * 100);
+                    driveTime = Convert.ToInt32(Math.Round(FuelAmaount / (4 * Capacity / 100), 0));
                     carAnimation.carAnimation.animation(driveTime);
+                    FuelAmaount = 0;
                     lost();
                 }
                 driveTime = driveDistance * 100;
@@ -63,7 +65,7 @@ namespace CarGame
         {
             string nick;
             Console.Clear();
-            if (usersList.Any<User>())
+            if (usersList.Any())
             {
                 int i = 1;
                 foreach (User user in usersList)
@@ -102,11 +104,13 @@ namespace CarGame
                 int list_lenght = 2;
                 foreach (var Car in carsList)
                 {
-                    if (list_lenght % 2 == 0)
+                    if (Car.FuelAmaount == 0)
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                    else if (list_lenght % 2 == 0)
                         Console.ForegroundColor = ConsoleColor.Green;
                     else
                         Console.ForegroundColor = ConsoleColor.DarkGreen;
-                    Console.WriteLine($"{list_lenght}. {Car.Brand} {Car.Model} {Car.Capacity}L");
+                    Console.WriteLine($"{list_lenght}. {Car.Brand} {Car.Model} {Car.Capacity}L {Car.CarScore}PKT");
                     list_lenght++;
                 }
                 Console.ForegroundColor = ConsoleColor.DarkRed; Console.WriteLine("0. Wyjście");
@@ -128,7 +132,7 @@ namespace CarGame
                 if (choose == 0) break;
                 switch (choose)
                 {
-                    case 1: Console.Write("Podaj dystans podróży w km: "); int driveDistance = inputLibrary.Int.restricted_int_input(0, int.MaxValue); c.Drive(driveDistance); score(c.Capacity, driveDistance, 120, 120, c.FuelAmaount); break;
+                    case 1: Console.Write("Podaj dystans podróży w km: "); int driveDistance = inputLibrary.Int.restricted_int_input(0, int.MaxValue); c.Drive(driveDistance); driveScore(driveDistance, 120, 120, c); break;
                     case 2:
                         Random rnd = new Random();
                         int gasStationDistance = rnd.Next(0, 50);
@@ -187,9 +191,10 @@ namespace CarGame
             }
             return carsList;
         }
-        static void score(double capacity, int driveDistance, int speed, int speedLimit, double fuelAmount)
+        static void driveScore(int driveDistance, int speed, int speedLimit, Car car)
         {
-            double score = (((capacity * 2.5) + (speed / 2) + (speed - speedLimit)) / 100) * driveDistance / fuelAmount;
+            double score = Math.Round((((car.Capacity * 2.5) + (speed / 2) + (speed - speedLimit)) / 100) * driveDistance / car.FuelAmaount, 2);
+            car.CarScore += score;
             Console.Clear();
             Console.WriteLine(score);
             Console.ReadKey();
