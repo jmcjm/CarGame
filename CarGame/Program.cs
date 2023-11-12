@@ -10,6 +10,16 @@ namespace CarGame
 {
     internal class Program
     {
+        class User
+        {
+            public string UserName { get; set; }
+            public double UserScore { get; set; }
+            public User(string UserName, double UserScore)
+            {
+                this.UserName = UserName;
+                this.UserScore = UserScore;
+            }
+        }
         class Car
         {
             public string Brand { get; set; }
@@ -48,6 +58,39 @@ namespace CarGame
                 double refuelAmount = inputLibrary.Double.restricted_double_input(0, FuelTankCapacity - FuelAmaount);
                 FuelAmaount += refuelAmount;
             }
+        }
+        static string user_select(List<User> usersList)
+        {
+            string nick;
+            Console.Clear();
+            if (usersList.Any<User>())
+            {
+                int i = 1;
+                foreach (User user in usersList)
+                {
+                    Console.WriteLine(i + ". " + user.UserName);
+                    i++;
+                }
+                Console.WriteLine("0. Dodaj nowego użytkownika");
+                Console.Write("Wybierz numer użytkownika: ");
+                int userNumber = inputLibrary.Int.restricted_int_input(0, usersList.Count);
+                if (userNumber == 0)
+                {
+                    Console.Write("Podaj swój nick: ");
+                    nick = inputLibrary.String.string_input();
+                    usersList.Add(new User(nick, 0));
+                }
+                else
+                    nick = usersList[userNumber - 1].UserName;
+            }
+            else
+            {
+                Console.Write("Podaj swój nick: ");
+                nick = inputLibrary.String.string_input();
+                usersList.Add(new User(nick, 0));
+            }
+            users_saver(usersList);
+            return nick;
         }
         static void main_menu(List<Car> carsList, string nick)
         {
@@ -146,18 +189,41 @@ namespace CarGame
         }
         static void score(double capacity, int driveDistance, int speed, int speedLimit, double fuelAmount)
         {
-            double score = (((capacity * 2.5)+(speed / 2)+(speed - speedLimit)) / 100) * driveDistance/fuelAmount;
+            double score = (((capacity * 2.5) + (speed / 2) + (speed - speedLimit)) / 100) * driveDistance / fuelAmount;
             Console.Clear();
             Console.WriteLine(score);
             Console.ReadKey();
         }
+        static List<User> users_reader(List<User> usersList)
+        {
+            if (File.Exists($"Users.json"))
+            {
+                string json = File.ReadAllText("Users.json");
+                var users = JsonSerializer.Deserialize<List<User>>(json);
+                if (users.Any())
+                {
+                    foreach (var user in users)
+                    {
+                        usersList.Add(user);
+                    }
+                }
+            }
+            return usersList;
+        }
+        static void users_saver(List<User> usersList)
+        {
+            string json = JsonSerializer.Serialize(usersList);
+            File.WriteAllText("Users.json", json);
+        }
         static void Main()
         {
-            List<Car> carsList = new List<Car>();
+            List<User> usersList = new List<User>();
+            users_reader(usersList);
+            string nick = user_select(usersList);
+            List <Car> carsList = new List<Car>();
             carsList.Add(new Car("Audi", "A3", 1.8, 40, 40));
             carsList.Add(new Car("Skoda", "Felicia", 1.1, 40, 40));
             Console.Clear();
-            Console.Write("Podaj swój nick: "); string nick = inputLibrary.String.string_input();
             cars_reader(carsList, nick);
             main_menu(carsList, nick);
         }
