@@ -71,7 +71,7 @@ namespace CarGame
                 Console.Write("\nWybierz samochód: "); int choose = inputLibrary.Int.restricted_int_input(0, list_lenght);
                 if (choose == 0) Environment.Exit(0);
                 else if (choose == 1) car_make(carsList, nick);
-                else game_menu(carsList[choose - 1], nick, carsList);
+                else game_menu(carsList[choose - 2], nick, carsList);
             } while (true);
         }
         static void game_menu(Car c, string nick, List<Car> carsList)
@@ -85,7 +85,7 @@ namespace CarGame
                 if (choose == 0) break;
                 switch (choose)
                 {
-                    case 1: Console.Write("Podaj dystans podróży w km: "); int driveDistance = inputLibrary.Int.restricted_int_input(0, int.MaxValue); c.Drive(driveDistance); break;
+                    case 1: Console.Write("Podaj dystans podróży w km: "); int driveDistance = inputLibrary.Int.restricted_int_input(0, int.MaxValue); c.Drive(driveDistance); score(c.Capacity, driveDistance, 120, 120, c.FuelAmaount); break;
                     case 2:
                         Random rnd = new Random();
                         int gasStationDistance = rnd.Next(0, 50);
@@ -132,7 +132,7 @@ namespace CarGame
         {
             if (File.Exists($"usersCars/{nick}Cars.json"))
             {
-                string json = File.ReadAllText($"{nick}Cars.json");
+                string json = File.ReadAllText($"usersCars/{nick}Cars.json");
                 var cars = JsonSerializer.Deserialize<List<Car>>(json);
                 if (cars.Any())
                 {
@@ -143,6 +143,13 @@ namespace CarGame
                 }
             }
             return carsList;
+        }
+        static void score(double capacity, int driveDistance, int speed, int speedLimit, double fuelAmount)
+        {
+            double score = (((capacity * 2.5)+(speed / 2)+(speed - speedLimit)) / 100) * driveDistance/fuelAmount;
+            Console.Clear();
+            Console.WriteLine(score);
+            Console.ReadKey();
         }
         static void Main()
         {
